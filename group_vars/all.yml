@@ -1,6 +1,6 @@
 ---
 
-_db_user_   : wordpress
-_db_pass_   : wordpress
-_db_name_   : wordpress_db
+_db_user_   : osticket_user
+_db_pass_   : osticket_password
+_db_name_   : osticket_db
 domain_url  : wier.madst.one

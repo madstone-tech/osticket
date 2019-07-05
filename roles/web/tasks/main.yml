@@ -48,7 +48,11 @@
       - php-gd 
       - php-curl
       - php-gettext
-      - php-imap
+      - php-intl
+      - php-opcache
+      - php-pecl-apcu
+      - php-pecl-apcu-devel
+#      - php-imap
     state: latest
     lock_timeout: 120
   become: yes
@@ -93,21 +97,17 @@
     remote_src: yes
     owner: nginx
     group: nginx
+    mode: '0755'
   become: yes
 
-#- name: copy wp-config.php configs
-#  template:
-#    src: ../templates/wp-config.php.j2
-#    dest: /usr/share/nginx/html/wordpress/wp-config.php
-#    owner: nginx
-#    group: nginx
-#  become: yes
-#  notify: restart nginx
-#  notify: restart php-fpm
-#
-#- name: install  wordpress-cli
-#  get_url:
-#    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-#    dest: /usr/local/bin/wp
-#    mode: ug+x
-#  become: yes
+- name: rename uploads folder
+  shell: mv /usr/share/nginx/html/upload /usr/share/nginx/html/osticket
+  become: yes
+
+- name: copy ost-config.php
+  copy:
+    src: /usr/share/nginx/html/osticket/include/ost-sampleconfig.php
+    dest: /usr/share/nginx/html/osticket/include/ost-config.php
+    user: nginx
+    group: nginx
+  become: yes
