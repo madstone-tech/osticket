@@ -1,0 +1,6 @@
+---
+
+_db_user_   : wordpress
+_db_pass_   : wordpress
+_db_name_   : wordpress_db
+domain_url  : wier.madst.one

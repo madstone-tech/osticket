@@ -1,0 +1,8 @@
+---
+
+- hosts : db
+  become: yes
+
+  roles: 
+    - common
+    - db

@@ -1,0 +1,113 @@
+---
+# tasks file for web
+
+- name: install nginx
+  yum:
+    name: nginx
+    state: latest
+    lock_timeout: 120
+  become: yes
+
+- name: enable nginx service
+  service:
+    name: nginx
+    enabled: yes
+  become: yes
+
+- name: restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: enable firewalld for http
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  become: yes
+
+- name: enable firewalld for https
+  firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  become: yes
+  notify: reload firewalld
+
+- name: php requirements
+  yum:
+    name: 
+      - php-cli
+      - php-fpm
+      - php-mysqlnd 
+      - php-json 
+      - php-mbstring 
+      - php-xml 
+      - php-gd 
+      - php-curl
+      - php-gettext
+      - php-imap
+    state: latest
+    lock_timeout: 120
+  become: yes
+
+
+- name: Configure php.ini
+  copy:
+     src: ../files/php.ini
+     dest: /etc/php.ini
+  become: yes
+
+- name: create socket directory for /run/php-fpm/www.sock
+  file:
+    state: directory
+    path: /run/php-fpm/
+    owner: nginx
+    group: nginx
+    recurse: yes
+  become: yes
+
+- name: Configure php-fpm
+  copy:
+     src: ../files/www.conf
+     dest: /etc/php-fpm.d/www.conf
+  become: yes
+  notify: restart php-fpm
+
+- name: fix php-session ownership
+  file:
+    path: /var/lib/php/
+    state: directory
+    owner: root
+    group: nginx
+    recurse: yes
+  become: yes
+
+
+- name: download and unarchive osticket package
+  unarchive:
+    src: "{{ _osticket_download_link_ }}"
+    dest: /usr/share/nginx/html/
+    remote_src: yes
+    owner: nginx
+    group: nginx
+  become: yes
+
+#- name: copy wp-config.php configs
+#  template:
+#    src: ../templates/wp-config.php.j2
+#    dest: /usr/share/nginx/html/wordpress/wp-config.php
+#    owner: nginx
+#    group: nginx
+#  become: yes
+#  notify: restart nginx
+#  notify: restart php-fpm
+#
+#- name: install  wordpress-cli
+#  get_url:
+#    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+#    dest: /usr/local/bin/wp
+#    mode: ug+x
+#  become: yes

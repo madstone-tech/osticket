@@ -1,0 +1,22 @@
+---
+# handlers file for db
+
+
+- name: start mariadb
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+  become: yes
+
+
+- name: restart mariadb
+  service:
+    name: mariadb
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: restart firewalld
+  shell: firewall-cmd --reload
+  become: yes

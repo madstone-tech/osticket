@@ -1,0 +1,76 @@
+---
+# tasks file for nginx
+
+- name: create directory for private ssl key
+  file:
+    path: "{{ _ssl_cert_key_directory_ }}"
+    state: directory
+    mode: '0700'
+  become: yes
+
+- name: create directory for cert 
+  file:
+    path: "{{ _ssl_cert_directory_ }}"
+    state: directory
+  become: yes
+
+- name: create directory for csr
+  file:
+    path: "{{ _ssl_cert_csr_directory_ }}"
+    state: directory
+  become: yes
+
+- name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
+  openssl_privatekey:
+    path: "{{ _ssl_cert_key_ }}"
+  become: yes
+
+- name: Generate an OpenSSL Certificate Signing Request
+  openssl_csr:
+    path: "{{ _ssl_cert_csr_ }}"
+    privatekey_path: "{{ _ssl_cert_key_ }}"
+    common_name: "{{ domain_url }}"
+  become: yes
+
+- name: Generate selfsigned Certificate
+  openssl_certificate:
+    path: "{{ _ssl_cert_path_ }}"
+    privatekey_path: "{{ _ssl_cert_key_ }}"
+    csr_path: "{{ _ssl_cert_csr_ }}"
+    provider: selfsigned
+    signature_algorithms:
+      - sha224WithRSAEncryption
+      - sha256WithRSAEncryption
+      - sha384WithRSAEncryption
+      - sha512WithRSAEncryption
+      - sha224WithECDSAEncryption
+      - sha256WithECDSAEncryption
+      - sha384WithECDSAEncryption
+      - sha512WithECDSAEncryption
+  become: yes
+
+- name: Generate DH Parameters
+  openssl_dhparam:
+    path: /etc/ssl/dhparams.pem
+    size: 2048
+  become: yes
+
+- name: copy nginx conf file
+  template:
+    src: ../templates/osticket.conf.j2
+    dest: /etc/nginx/conf.d/osticket.conf
+  become: yes
+
+- name: restart nginx
+  service: 
+    name: nginx
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: restart php-fpm
+  service: 
+    name: php-fpm
+    state: restarted
+    enabled: yes
+  become: yes
