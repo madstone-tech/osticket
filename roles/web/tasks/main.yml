@@ -1,6 +1,14 @@
 ---
 # tasks file for web
 
+- name: install git
+  yum:
+    namde: git 
+    state: latest
+    lock_timeout: 120
+  become: yes
+
+
 - name: install nginx
   yum:
     name: nginx
@@ -108,6 +116,19 @@
   copy:
     src: /usr/share/nginx/html/osticket/include/ost-sampleconfig.php
     dest: /usr/share/nginx/html/osticket/include/ost-config.php
-    user: nginx
+    owner: nginx
     group: nginx
+    remote_src: yes
   become: yes
+
+
+- name: download osticket plugins
+  git:
+    repo: https://github.com/osTicket/osTicket-plugins.git
+    dest: /usr/share/nginx/html/osticket/include/plugins
+  become: yes
+
+- name: install core plugins 
+  shell: cd /usr/share/nginx/html/osticket/include/plugins/osTicket-plugins && php make.php hydrate
+  become: yes
+  
