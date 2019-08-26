@@ -135,7 +135,13 @@
 - name: download osticket plugins
   git:
     repo: https://github.com/osTicket/osTicket-plugins.git
-    dest: /usr/share/nginx/html/osticket/include/plugins/
+    dest: /usr/share/nginx/html/osticket/include/plugins/download
+  become: yes
+
+- name:  move plugins repo
+  command: mv * ../../
+  args:
+    chdir: /usr/share/nginx/html/osticket/include/plugins/download/
   become: yes
 
 - name: install core plugins 
