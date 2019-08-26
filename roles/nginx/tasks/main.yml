@@ -74,3 +74,10 @@
     state: restarted
     enabled: yes
   become: yes
+
+- name: restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+  become: yes

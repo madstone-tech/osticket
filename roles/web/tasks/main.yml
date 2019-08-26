@@ -3,7 +3,7 @@
 
 - name: install git
   yum:
-    namde: git 
+    name: git 
     state: latest
     lock_timeout: 120
   become: yes
@@ -34,6 +34,7 @@
     service: http
     permanent: yes
     state: enabled
+    immediate: yes
   become: yes
 
 - name: enable firewalld for https
@@ -41,6 +42,7 @@
     service: https
     permanent: yes
     state: enabled
+    immediate: yes
   become: yes
   notify: reload firewalld
 
@@ -60,7 +62,8 @@
       - php-opcache
       - php-pecl-apcu
       - php-pecl-apcu-devel
-#      - php-imap
+      - php-common
+ #     - php-imap
     state: latest
     lock_timeout: 120
   become: yes
@@ -97,19 +100,26 @@
     recurse: yes
   become: yes
 
-
-- name: download and unarchive osticket package
-  unarchive:
-    src: "{{ _osticket_download_link_ }}"
-    dest: /usr/share/nginx/html/
-    remote_src: yes
+- name: create folder for git repo
+  file:
+    path: /opt/osticket
+    state: directory
     owner: nginx
     group: nginx
-    mode: '0755'
+    recurse: yes
   become: yes
 
-- name: rename uploads folder
-  shell: mv /usr/share/nginx/html/upload /usr/share/nginx/html/osticket
+- name : download package
+  git:
+    repo: https://github.com/osTicket/osTicket
+    dest: /opt/osticket
+    version: 1.12.x
+  become_user: nginx
+
+- name: deploy package
+  command: php manage.php deploy --setup /usr/share/nginx/html/osticket
+  args:
+    chdir: /opt/osticket
   become: yes
 
 - name: copy ost-config.php
@@ -125,10 +135,20 @@
 - name: download osticket plugins
   git:
     repo: https://github.com/osTicket/osTicket-plugins.git
-    dest: /usr/share/nginx/html/osticket/include/plugins
+    dest: /usr/share/nginx/html/osticket/include/plugins/
   become: yes
 
 - name: install core plugins 
-  shell: cd /usr/share/nginx/html/osticket/include/plugins/osTicket-plugins && php make.php hydrate
+  command: php make.php hydrate
+  args:
+    chdir: /usr/share/nginx/html/osticket/include/plugins/
   become: yes
-  
+
+- name: change permission
+  file:
+    path: /usr/share/nginx/html/osticket
+    state: directory
+    owner: nginx
+    group: nginx
+    recurse: yes
+  become: yes  
