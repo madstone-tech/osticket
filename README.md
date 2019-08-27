@@ -8,6 +8,7 @@ This playbook sets out to install
 * nginx
 * mariadb 10.2
 
+
 List of Roles
 =========
 
@@ -73,7 +74,6 @@ directory structure
 ├── dev
 ├── group_vars
 │   ├── all.yml
-├── production
 ├── README.md
 ├── roles
 │   ├── common
@@ -101,9 +101,22 @@ directory structure
 │       │   └── main.yml
 │       └── tasks
 │           └── main.yml
+├── site
 ├── Vagrantfile
 └── web.yml
 ```
+
+Install
+======
+
+1. clone this repository `git clone https://github.com/madstone-tech/osticket`
+2. modify the variables to suit your environment
+   1. in `site` file, change the IP or FQDN for the [web] servers
+   2. in `group_vars/all.yml` change the database username, passwords, fqdn/ip and domain_url
+3. configure up the database server `ansible-playbook -i site db.yml`
+4. configure the web server `ansible-playbook -i site web.yml`
+
+*if running the database and web applcation  under the same make sure the IP/FQDN under the variables are the same in the variable file*
 
 Dependencies
 ------------
@@ -121,6 +134,7 @@ Author Information
 
 Andhi Jeannot
 MADSTONE TECHNOLOGY, inc
+
 https://madstone.io
 
 https://github.com/madstone-tech
