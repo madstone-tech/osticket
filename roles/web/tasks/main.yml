@@ -1,5 +1,4 @@
 ---
-# tasks file for web
 
 - name: install git
   yum:
@@ -7,7 +6,6 @@
     state: latest
     lock_timeout: 120
   become: yes
-
 
 - name: install nginx
   yum:
@@ -67,7 +65,6 @@
     state: latest
     lock_timeout: 120
   become: yes
-
 
 - name: Configure php.ini
   copy:
@@ -131,17 +128,19 @@
     remote_src: yes
   become: yes
 
-
 - name: download osticket plugins
   git:
     repo: https://github.com/osTicket/osTicket-plugins.git
-    dest: /usr/share/nginx/html/osticket/include/plugins/download
+    dest: /opt/osticket-plugins
   become: yes
 
-- name:  move plugins repo
-  command: mv * ../../
-  args:
-    chdir: /usr/share/nginx/html/osticket/include/plugins/download/
+- name: deploy plugins
+  copy:
+      dest: /usr/share/nginx/html/osticket/include/plugins/
+      src: /opt/osticket-plugins/ 
+      remote_src: yes
+      group: nginx 
+      owner: nginx 
   become: yes
 
 - name: install core plugins 
