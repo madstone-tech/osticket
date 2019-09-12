@@ -1,16 +1,14 @@
 ---
+_db_user_: osticket_user
+_db_pass_: osticket_password
+_db_name_: osticket_db
+domain_url: support.madst.one
 
-_db_user_   : osticket_user
-_db_pass_   : osticket_password
-_db_name_   : osticket_db
-domain_url  : support.madst.one
+_db_host_: 192.168.44.11
+_ssl_cert_directory_: /etc/ssl/certs
+_ssl_cert_key_directory_: /etc/ssl/private
+_ssl_cert_csr_directory_: /etc/ssl/csr
 
-_db_host_   : 192.168.44.11
-_osticket_download_link_ : 
-_ssl_cert_directory_      : /etc/ssl/certs
-_ssl_cert_key_directory_  : /etc/ssl/private
-_ssl_cert_csr_directory_  : /etc/ssl/csr
-
-_ssl_cert_path_ :   /etc/ssl/certs/ssl-cert.crt
-_ssl_cert_key_  :   /etc/ssl/private/ssl-privkey.pem
-_ssl_cert_csr_  :   /etc/ssl/csr/ssl-csr.csr
+_ssl_cert_path_: /etc/ssl/certs/ssl-cert.crt
+_ssl_cert_key_: /etc/ssl/private/ssl-privkey.pem
+_ssl_cert_csr_: /etc/ssl/csr/ssl-csr.csr

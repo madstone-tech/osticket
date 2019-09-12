@@ -1,8 +1,7 @@
 ---
-
 - name: install git
   yum:
-    name: git 
+    name: git
     state: latest
     lock_timeout: 120
   become: yes
@@ -46,14 +45,14 @@
 
 - name: php requirements
   yum:
-    name: 
+    name:
       - php-cli
       - php-fpm
-      - php-mysqlnd 
-      - php-json 
-      - php-mbstring 
-      - php-xml 
-      - php-gd 
+      - php-mysqlnd
+      - php-json
+      - php-mbstring
+      - php-xml
+      - php-gd
       - php-curl
       - php-gettext
       - php-intl
@@ -61,15 +60,15 @@
       - php-pecl-apcu
       - php-pecl-apcu-devel
       - php-common
- #     - php-imap
+    #      - php-imap
     state: latest
     lock_timeout: 120
   become: yes
 
 - name: Configure php.ini
   copy:
-     src: ../files/php.ini
-     dest: /etc/php.ini
+    src: ../files/php.ini
+    dest: /etc/php.ini
   become: yes
 
 - name: create socket directory for /run/php-fpm/www.sock
@@ -83,8 +82,8 @@
 
 - name: Configure php-fpm
   copy:
-     src: ../files/www.conf
-     dest: /etc/php-fpm.d/www.conf
+    src: ../files/www.conf
+    dest: /etc/php-fpm.d/www.conf
   become: yes
   notify: restart php-fpm
 
@@ -106,7 +105,7 @@
     recurse: yes
   become: yes
 
-- name : download package
+- name: download package
   git:
     repo: https://github.com/osTicket/osTicket
     dest: /opt/osticket
@@ -136,14 +135,14 @@
 
 - name: deploy plugins
   copy:
-      dest: /usr/share/nginx/html/osticket/include/plugins/
-      src: /opt/osticket-plugins/ 
-      remote_src: yes
-      group: nginx 
-      owner: nginx 
+    dest: /usr/share/nginx/html/osticket/include/plugins/
+    src: /opt/osticket-plugins/
+    remote_src: yes
+    group: nginx
+    owner: nginx
   become: yes
 
-- name: install core plugins 
+- name: install core plugins
   command: php make.php hydrate
   args:
     chdir: /usr/share/nginx/html/osticket/include/plugins/
@@ -156,4 +155,4 @@
     owner: nginx
     group: nginx
     recurse: yes
-  become: yes  
+  become: yes
