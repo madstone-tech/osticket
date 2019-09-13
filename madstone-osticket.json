@@ -1,0 +1,36 @@
+{
+    "variables": {
+      "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+      "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+      "source_ami": "ami-0ff8a91507f77f867"
+    },
+    "builders": [{
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "us-east-1",
+        "vpc_id": "vpc-0a376c523a889c0ee",
+        "security_group_id": "sg-0d5d144fc8e1ae64b",
+        "subnet_id": "subnet-0453d7d55057de9f3",
+        "source_ami": "ami-0b898040803850657",
+        "instance_type": "t2.micro",
+        "ssh_username": "ec2-user",
+        "ami_name": "madstone-osticket-ami {{timestamp | clean_ami_name}}"
+    }],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo ENABLE amazon-linux-extras",
+                "sudo amazon-linux-extras install epel -y"
+            ]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "/web.yml",
+            "extra_arguments": [ "-vvvv" ]
+        }
+    ]
+
+
+}
