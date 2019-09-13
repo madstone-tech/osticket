@@ -27,7 +27,7 @@
         },
         {
             "type": "ansible",
-            "playbook_file": "/web.yml",
+            "playbook_file": "web.yml",
             "extra_arguments": [ "-vvvv" ]
         }
     ]
