@@ -109,7 +109,7 @@
   git:
     repo: https://github.com/osTicket/osTicket
     dest: /opt/osticket
-    version: 1.12.x
+    version: "{{ _osticket_version_ }}"
   become_user: nginx
 
 - name: deploy package

@@ -2,8 +2,8 @@
 # tasks file for common
 
 - name: Enable Extra amazon-linux-extra repo
-  command: amazon-linux-extras install epel nginx1.12 lamp-mariadb10.2-php7.2 php7.2  -y 
-  become: yes 
+  command: amazon-linux-extras install epel nginx1.12 lamp-mariadb10.2-php7.2 php7.2  -y
+  become: yes
 
 - name: install fail2ban
   yum:
@@ -16,7 +16,7 @@
   copy:
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.local
-    remote_src: yes 
+    remote_src: yes
   become: yes
 
 - name: enable fail2ban service
@@ -32,7 +32,7 @@
   become: yes
 
 - name: install firewalld
-  yum: 
+  yum:
     name: firewalld
     state: latest
     lock_timeout: 120
@@ -45,7 +45,7 @@
     state: started
   become: yes
 
-- name : install ntp
+- name: install ntp
   yum:
     name: ntp
     state: latest
@@ -74,7 +74,7 @@
 - name: modify yum-cron.conf
   lineinfile:
     path: /etc/yum/yum-cron.conf
-    regexp: '^apply_updates = no'
+    regexp: "^apply_updates = no"
     line: apply_updates = yes
   become: yes
 
@@ -87,7 +87,7 @@
 
 - name: upgrade all packages
   yum:
-    name: '*'
+    name: "*"
     state: latest
     lock_timeout: 120
   become: yes

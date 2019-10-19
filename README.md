@@ -1,51 +1,42 @@
-Deploy osTicket on Amazon Linux 2
-=================================
+# Deploy osTicket on Amazon Linux 2
 
-This playbook sets out to install 
+This playbook sets out to install
 
-* latest version of osticket
-* php 7.2
-* nginx
-* mariadb 10.2
+- latest version of osticket
+- php 7.2
+- nginx
+- mariadb 10.2
 
+# List of Roles
 
-List of Roles
-=========
+- common
+- db
+- nginx
+- web
 
-* common
-* db
-* nginx
-* web
-
-Playbook description
-====================
+# Playbook description
 
 | playbook  | roles            | description                                        |
 | --------- | ---------------- | -------------------------------------------------- |
 | `db.yml`  | common,db        | runs common role and db                            |
 | `web.yml` | common,web,nginx | runs common, installs osticket and configure nginx |
 
-Inventory files
-===============
+# Inventory files
 
 | inventory | purpose                 |
 | --------- | ----------------------- |
 | dev       | dev environnment        |
 | site      | production environnment |
 
-*IPs for servers should be updated to reflect your environment* 
+_IPs for servers should be updated to reflect your environment_
 
+## Requirements
 
-Requirements
-------------
+- Amazon-Linux-2
+- Vagrant and Virtualbox if unsing Vagrantfile
+- Ansible 2.8+
 
-* Amazon-Linux-2
-* Vagrant and Virtualbox if unsing Vagrantfile
-* Ansible 2.8+
-
-
-Role Variables
---------------
+## Role Variables
 
 variables are found in `group_vars/all.yml`
 
@@ -55,6 +46,7 @@ variables are found in `group_vars/all.yml`
 | `_db_pass_`                | `osticket_password`                | database password                     |
 | `_db_name_`                | `osticket_db`                      | database name                         |
 | `_db_host_`                | `192.168.44.11`                    | database host                         |
+| `_osticket_version_`       | `1.14.x`                           | osticket git branch                   |
 | `domain_url`               | `support.madst.one`                | domain url                            |
 | `_ssl_cert_directory_`     | `/etc/ssl/certs`                   | certificate directory                 |
 | `_ssl_cert_key_directory_` | `/etc/ssl/private`                 | certificate key directory             |
@@ -65,9 +57,7 @@ variables are found in `group_vars/all.yml`
 
 modify the variable to suit your environment
 
-directory structure
-===================
-
+# directory structure
 
 ```
 ├── db.yml
@@ -106,8 +96,7 @@ directory structure
 └── web.yml
 ```
 
-Install
-======
+# Install
 
 1. clone this repository `git clone https://github.com/madstone-tech/osticket`
 2. modify the variables to suit your environment
@@ -116,21 +105,17 @@ Install
 3. configure up the database server `ansible-playbook -i site db.yml`
 4. configure the web server `ansible-playbook -i site web.yml`
 
-*if running the database and web applcation  under the same make sure the IP/FQDN under the variables are the same in the variable file*
+_if running the database and web applcation under the same make sure the IP/FQDN under the variables are the same in the variable file_
 
-Dependencies
-------------
+## Dependencies
 
 If running this playbook Vagrant, Vagrant and Virtualbox need to be installed
 
-
-License
--------
+## License
 
 BSD
 
-Author Information
-------------------
+## Author Information
 
 Andhi Jeannot
 MADSTONE TECHNOLOGY, inc

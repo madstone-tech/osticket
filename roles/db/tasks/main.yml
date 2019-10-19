@@ -2,8 +2,8 @@
 # tasks file for db
 
 - name: install MariaDB 10 from amazon repo
-  yum: 
-    name: 
+  yum:
+    name:
       - mariadb-server
       - python2-PyMySQL
     state: latest
@@ -20,24 +20,24 @@
 
 - name: Remove anonymous user account for localhost
   mysql_user:
-    name: ''
+    name: ""
     host_all: yes
     state: absent
   become: yes
 
 - name: Create database
   mysql_db:
-    name: '{{ _db_name_ }}'
+    name: "{{ _db_name_ }}"
     state: present
     login_host: localhost
   become: yes
 
 - name: Create user for the database
   mysql_user:
-    name: '{{ _db_user_ }}'
-    password: '{{ _db_pass_ }}'
-    host: '%'
-    priv: '*.*:ALL,GRANT'
+    name: "{{ _db_user_ }}"
+    password: "{{ _db_pass_ }}"
+    host: "%"
+    priv: "*.*:ALL,GRANT"
     state: present
   become: yes
 
@@ -52,7 +52,7 @@
 - name: allow remote access to db
   lineinfile:
     path: /etc/my.cnf.d/mariadb-server.cnf
-    regexp: '^#bind-address='
+    regexp: "^#bind-address="
     line: bind-address=0.0.0.0
   become: yes
   notify: restart mariadb

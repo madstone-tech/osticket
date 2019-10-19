@@ -3,6 +3,7 @@ _db_user_: osticket_user
 _db_pass_: osticket_password
 _db_name_: osticket_db
 domain_url: support.madst.one
+_osticket_version_: 1.14.x
 
 _db_host_: 192.168.44.11
 _ssl_cert_directory_: /etc/ssl/certs
