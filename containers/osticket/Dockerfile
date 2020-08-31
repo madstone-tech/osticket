@@ -1,10 +1,12 @@
 FROM amazonlinux:latest
 # update and install some utilities
-RUN yum update -y && yum clean all && yum install git tar gzip -y
+RUN yum update -y && \
+    yum clean all && \
+    yum install git tar gzip -y
 # install Epel php7.4 and nginx 
 RUN amazon-linux-extras install epel php7.4 httpd_modules nginx1 -y
 
-RUN yum install -y php php-{mbstring,xml,gd,curl,gettext,intl,opcache,pecl-apcu,pecl-apcu-devel}
+RUN yum install -y supervisor php php-{mbstring,xml,gd,curl,gettext,intl,opcache,pecl-apcu,pecl-apcu-devel}
 # inscrease limits on php.ini
 ENV OSTICKET_VERSION 1.14.x
 
@@ -26,9 +28,7 @@ RUN php manage.php deploy --setup /usr/share/nginx/html/osticket
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-COPY entrypoint.sh /usr/local/bin/
-ENTRYPOINT [ "entrypoint.sh" ]
-CMD ["nginx", "-g", "daemon off;"]
-
-
+COPY supervisord.conf /etc/supervisord.conf
+#ENTRYPOINT [ "/usr/bin/supervisord" ]
+CMD ["/usr/bin/supervisord"]
 
