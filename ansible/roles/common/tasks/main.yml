@@ -2,7 +2,7 @@
 # tasks file for common
 
 - name: Enable Extra amazon-linux-extra repo
-  command: amazon-linux-extras install epel nginx1.12 lamp-mariadb10.2-php7.2 php7.2  -y
+  command: amazon-linux-extras install epel -y
   become: yes
 
 - name: install fail2ban

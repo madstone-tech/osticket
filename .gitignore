@@ -38,13 +38,15 @@
 ehthumbs.db
 Thumbs.db
 
-
 # Vagrant Files #
 #################
 .vagrant
-
 
 # Ansible Troubleshooting file #
 ################################
 
 *.retry
+
+# Container Building
+
+containers/data
